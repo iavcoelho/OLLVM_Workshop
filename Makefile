@@ -14,24 +14,34 @@ define compile_pass
 	podman run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang++ -std=c++20 -fPIC -shared passes/$(1)/src/*.cc -o bin/$(NAME).so \`llvm-config --cxxflags --ldflags --libs core support\`"
 endef
 
-ListFunctionNames: clean
+0x00_SimplePass: clean
 	@ $(call log_info,Compiling...)
-	@ $(call compile_pass,ListFunctionNames)
+	@ $(call compile_pass,0x00_SimplePass)
 	@ $(call log_success)
 
-ListFunctions: clean
+0x01_ListFunctionNames: clean
 	@ $(call log_info,Compiling...)
-	@ $(call compile_pass,ListFunctions)
+	@ $(call compile_pass,0x01_ListFunctionNames)
 	@ $(call log_success)
 
-ListBasicBlocks: clean
+0x02_ListFunctions: clean
 	@ $(call log_info,Compiling...)
-	@ $(call compile_pass,ListBasicBlocks)
+	@ $(call compile_pass,0x02_ListFunctions)
 	@ $(call log_success)
 
-ListInstructions: clean
+0x03_ListBasicBlocks: clean
 	@ $(call log_info,Compiling...)
-	@ $(call compile_pass,ListInstructions)
+	@ $(call compile_pass,0x03_ListBasicBlocks)
+	@ $(call log_success)
+
+0x04_ListInstructions: clean
+	@ $(call log_info,Compiling...)
+	@ $(call compile_pass,0x04_ListInstructions)
+	@ $(call log_success)
+
+0x05_SimpleMod: clean
+	@ $(call log_info,Compiling...)
+	@ $(call compile_pass,0x05_SimpleMod)
 	@ $(call log_success)
 
 test:

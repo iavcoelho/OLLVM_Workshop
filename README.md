@@ -1,20 +1,43 @@
-# Concept
+# Workshop: OLLVM for the rest of Us
 
-Simple LLVM obfuscator
+This repository contains slides and hands-on materials for the OLLVM workshop. The workshop targets a technical audience with minimal security experience and teaches the fundamentals through practical, self-contained tasks. Topics include:
 
-# Compiling
+* Simple LLVM Hello World 
+* Functions names listing
+* Function, Instruction and Basic Block Body Listing
+* Simple program operation modification
 
-## Build pod image
+* Randomize register allocation
+* Transform `mov reg, imm`
+* Transform `mov [reg+var], imm`
+* Transform nullifications
+* Control Flow Flattening
+
+## Prerequisites
+* Basic knowledge of C/C++ programming
+* Docker/Podman installed on your machine
+
+## Getting Started
+1. Clone the repository:
 ```bash
-$ make pod-build
+git clone https://github.com/yourusername/OLLVM_Workshop.git
+cd OLLVM_Workshop
 ```
 
-## Build ollvm.so
+2. Build the Docker image for OLLVM pass compilation:
 ```bash
-$ make
+make pod-build
 ```
 
-## Build and test ollvm.so with `test/test.c`
+3. Compile passes:
 ```bash
-$ make test
+make <pass-name>
 ```
+
+4. Test the pass against the provided test program:
+```bash
+make test
+```
+
+## License
+This project is licensed under the MIT License. See the `LICENSE` file for details.

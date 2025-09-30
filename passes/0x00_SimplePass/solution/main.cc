@@ -7,15 +7,9 @@
 using namespace llvm;
 
 namespace {
-    struct ListInstructions : public PassInfoMixin<ListInstructions> {
+    struct HelloWorldPass : public PassInfoMixin<HelloWorldPass> {
         PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
-            for (auto& F : M) {
-                for (auto& B : F) {
-                    for (auto& I : B) {
-                        errs() << "Instruction:\n" << I << "\n";
-                    }
-                }
-            }
+            errs() << "Hello, World!\n";
             return PreservedAnalyses::all();
         };
     };
@@ -24,12 +18,12 @@ namespace {
 extern "C" LLVM_ATTRIBUTE_WEAK PassPluginLibraryInfo llvmGetPassPluginInfo() {
     return {
         .APIVersion = LLVM_PLUGIN_API_VERSION,
-        .PluginName = "ListInstructions",
+        .PluginName = "HelloWorldPass",
         .PluginVersion = "v0.1",
         .RegisterPassBuilderCallbacks = [](PassBuilder &PB) {
             PB.registerPipelineStartEPCallback(
                 [](ModulePassManager &MPM, OptimizationLevel Level) {
-                    MPM.addPass(ListInstructions());
+                    MPM.addPass(HelloWorldPass());
                 });
         }
     };

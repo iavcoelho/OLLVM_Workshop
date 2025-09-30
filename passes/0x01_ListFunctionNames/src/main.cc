@@ -7,12 +7,10 @@
 using namespace llvm;
 
 namespace {
-    struct ListBasicBlocks : public PassInfoMixin<ListBasicBlocks> {
+    struct ListFunctionNames : public PassInfoMixin<ListFunctionNames> {
         PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
-            for (auto& F : M) {
-                for (auto& B : F) {
-                    errs() << "Basic Block:\n" << B << "\n";
-                }
+            for (auto &F : M) {
+                errs() << "Function name: " << F.getName() << "\n";
             }
             return PreservedAnalyses::all();
         };
@@ -22,12 +20,12 @@ namespace {
 extern "C" LLVM_ATTRIBUTE_WEAK PassPluginLibraryInfo llvmGetPassPluginInfo() {
     return {
         .APIVersion = LLVM_PLUGIN_API_VERSION,
-        .PluginName = "ListBasicBlocks",
+        .PluginName = "ListFunctionNames",
         .PluginVersion = "v0.1",
         .RegisterPassBuilderCallbacks = [](PassBuilder &PB) {
             PB.registerPipelineStartEPCallback(
                 [](ModulePassManager &MPM, OptimizationLevel Level) {
-                    MPM.addPass(ListBasicBlocks());
+                    MPM.addPass(ListFunctionNames());
                 });
         }
     };
