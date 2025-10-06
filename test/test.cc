@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-extern "C" int arithmetic() {
+extern "C" void arithmetic() {
     volatile int a = 10;
     volatile int b = 5;
 
@@ -10,14 +10,11 @@ extern "C" int arithmetic() {
     int res_and = a & b; // Expected: 0
     int res_or  = a | b; // Expected: 15
 
-    printf("Addition: %d + %d = %d\n", a, b, res_add);
-    printf("Subtraction: %d - %d = %d\n", a, b, res_sub);
+    printf("ADD: %d + %d = %d\n", a, b, res_add);
+    printf("SUB: %d - %d = %d\n", a, b, res_sub);
     printf("XOR: %d ^ %d = %d\n", a, b, res_xor);
     printf("AND: %d & %d = %d\n", a, b, res_and);
-    printf("OR: %d | %d = %d\n", a, b, res_or);
-
-    // This is to prevent the variables from being optimized away.
-    return res_add + res_sub + res_xor + res_and + res_or;
+    printf("OR : %d | %d = %d\n", a, b, res_or);;
 }
 
 extern "C" int add(int a, int b) {
