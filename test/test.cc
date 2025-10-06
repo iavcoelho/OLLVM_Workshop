@@ -1,13 +1,23 @@
 #include <stdio.h>
 
-extern "C" int mov() {
-    // volatile to prevent optimization
-    volatile int result;
-    __asm__(
-        "movl $42, %0"
-        : "=r"(result) // "=r" means the result will be in a general-purpose register
-    );
-    return result;
+extern "C" int arithmetic() {
+    volatile int a = 10;
+    volatile int b = 5;
+
+    int res_add = a + b; // Expected: 15
+    int res_sub = a - b; // Expected: 5
+    int res_xor = a ^ b; // Expected: 15
+    int res_and = a & b; // Expected: 0
+    int res_or  = a | b; // Expected: 15
+
+    printf("Addition: %d + %d = %d\n", a, b, res_add);
+    printf("Subtraction: %d - %d = %d\n", a, b, res_sub);
+    printf("XOR: %d ^ %d = %d\n", a, b, res_xor);
+    printf("AND: %d & %d = %d\n", a, b, res_and);
+    printf("OR: %d | %d = %d\n", a, b, res_or);
+
+    // This is to prevent the variables from being optimized away.
+    return res_add + res_sub + res_xor + res_and + res_or;
 }
 
 extern "C" int add(int a, int b) {
@@ -23,7 +33,7 @@ extern "C" void my_function() {
 
 int main() {
     my_function();
-    int val = mov();
-    printf("Mov result: %d\n", val);
+    
+    arithmetic();
     return 0;
 }

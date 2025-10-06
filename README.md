@@ -6,11 +6,9 @@ This repository contains slides and hands-on materials for the OLLVM workshop. T
 * Functions names listing
 * Function, Instruction and Basic Block Body Listing
 * Simple program operation modification
-
-* Randomize register allocation
-* Transform `mov reg, imm`
-* Transform `mov [reg+var], imm`
-* Transform nullifications
+* Arithmetic Obfuscation
+* Basic Block Duplicate
+* Opaque Predicate Insertion
 * Control Flow Flattening
 
 ## Prerequisites
