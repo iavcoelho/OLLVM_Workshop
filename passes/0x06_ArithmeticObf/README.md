@@ -1,4 +1,4 @@
-# Arithmetic Obfuscaton
+# Arithmetic Obfuscation
 This is a simple implementation of a LLVM pass that obfuscates arithmetic operations in the LLVM IR code. The pass replaces the operations: +, -, ^, &, | with equivalent but more complex expressions.
 
 The substitutions are as follows:

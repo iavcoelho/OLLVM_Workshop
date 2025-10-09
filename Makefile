@@ -49,6 +49,11 @@ endef
 	@ $(call compile_pass,0x06_ArithmeticObf)
 	@ $(call log_success)
 
+0x07_SplitBB: clean
+	@ $(call log_info,Compiling...)
+	@ $(call compile_pass,0x07_SplitBB)
+	@ $(call log_success)
+
 test:
 	@ $(call log_info,Testing...)
 	@ clang -fpass-plugin=bin/$(NAME).so test/test.cc -o test/test

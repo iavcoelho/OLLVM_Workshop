@@ -76,8 +76,8 @@ namespace {
                                     binOp->getOpcode() == Instruction::Xor ||
                                     binOp->getOpcode() == Instruction::And ||
                                     binOp->getOpcode() == Instruction::Or) {
-                                        worklist.push_back(binOp);                                      // Save to modify later
-                                }
+                                    worklist.push_back(binOp);                                          // Save to modify later
+                                    }
                             }
                         }
                     }

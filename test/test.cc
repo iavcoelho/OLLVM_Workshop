@@ -32,5 +32,6 @@ int main() {
     my_function();
     
     arithmetic();
+
     return 0;
 }

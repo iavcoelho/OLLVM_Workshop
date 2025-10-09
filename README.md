@@ -4,11 +4,10 @@ This repository contains slides and hands-on materials for the OLLVM workshop. T
 
 * Simple LLVM Hello World 
 * Functions names listing
-* Function, Instruction and Basic Block Body Listing
+* Function, Instruction and Basic Block body listing
 * Simple program operation modification
 * Arithmetic Obfuscation
-* Basic Block Duplicate
-* Opaque Predicate Insertion
+* Basic Block Splitting
 * Control Flow Flattening
 
 ## Prerequisites
