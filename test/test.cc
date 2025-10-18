@@ -1,14 +1,27 @@
 #include <stdio.h>
 
+extern "C" int check_number(int n) {
+    if (n > 0) {
+        printf("The number %d is positive.\n", n);
+        return 1;
+    } else if (n < 0) {
+        printf("The number %d is negative.\n", n);
+        return -1;
+    } else {
+        printf("The number %d is zero.\n", n);
+        return 0;
+    }
+}
+
 extern "C" void arithmetic() {
     volatile int a = 10;
     volatile int b = 5;
 
-    int res_add = a + b; // Expected: 15
-    int res_sub = a - b; // Expected: 5
-    int res_xor = a ^ b; // Expected: 15
-    int res_and = a & b; // Expected: 0
-    int res_or  = a | b; // Expected: 15
+    volatile int res_add = a + b; // Expected: 15
+    volatile int res_sub = a - b; // Expected: 5
+    volatile int res_xor = a ^ b; // Expected: 15
+    volatile int res_and = a & b; // Expected: 0
+    volatile int res_or  = a | b; // Expected: 15
 
     printf("ADD: %d + %d = %d\n", a, b, res_add);
     printf("SUB: %d - %d = %d\n", a, b, res_sub);
@@ -32,6 +45,10 @@ int main() {
     my_function();
     
     arithmetic();
+
+    check_number(10);
+    check_number(-5);
+    check_number(0);
 
     return 0;
 }

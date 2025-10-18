@@ -1,4 +1,4 @@
-# Workshop: OLLVM for the rest of Us
+# Workshop: OLLVM for the rest of us
 
 This repository contains slides and hands-on materials for the OLLVM workshop. The workshop targets a technical audience with minimal security experience and teaches the fundamentals through practical, self-contained tasks. Topics include:
 

@@ -18,7 +18,7 @@
 using namespace llvm;
 
 namespace {
-    struct SplitBasicBlock : public PassInfoMixin<SplitBasicBlock> {
+    struct SplitBasicBlocks : public PassInfoMixin<SplitBasicBlocks> {
         PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
             srand(time(NULL));
 
@@ -71,27 +71,12 @@ namespace {
                     builder.CreateCondBr(fixedCond, successor, dummyBlock);
                     oldTerminator->eraseFromParent();
 
-                    errs() << formatv("[REPLACED]: Block was slpitted\t");
+                    //errs() << formatv("[REPLACED]: Block was slpitted\t");
                 }
 
                 errs() << "[Done]\n";
             }
             return PreservedAnalyses::none();
-        }
-    };
-}
-
-// Plugin registration remains the same.
-extern "C" LLVM_ATTRIBUTE_WEAK PassPluginLibraryInfo llvmGetPassPluginInfo() {
-    return {
-        .APIVersion = LLVM_PLUGIN_API_VERSION,
-        .PluginName = "SplitBasicBlock",
-        .PluginVersion = "v0.1",
-        .RegisterPassBuilderCallbacks = [](PassBuilder &PB) {
-            PB.registerPipelineStartEPCallback(
-                [](ModulePassManager &MPM, OptimizationLevel Level) {
-                    MPM.addPass(SplitBasicBlock());
-                });
         }
     };
 }

@@ -49,9 +49,19 @@ endef
 	@ $(call compile_pass,0x06_ArithmeticObf)
 	@ $(call log_success)
 
-0x07_SplitBB: clean
+0x07_SplitBasicBlocks: clean
 	@ $(call log_info,Compiling...)
-	@ $(call compile_pass,0x07_SplitBB)
+	@ $(call compile_pass,0x07_SplitBasicBlocks)
+	@ $(call log_success)
+
+0x08_ControlFlowFlattening: clean
+	@ $(call log_info,Compiling...)
+	@ $(call compile_pass,0x08_ControlFlowFlattening)
+	@ $(call log_success)
+
+0x09_Pipeline: clean
+	@ $(call log_info,Compiling...)
+	@ $(call compile_pass,0x09_Pipeline)
 	@ $(call log_success)
 
 test:
