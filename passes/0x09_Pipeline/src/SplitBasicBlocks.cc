@@ -20,6 +20,7 @@ using namespace llvm;
 namespace {
     struct SplitBasicBlocks : public PassInfoMixin<SplitBasicBlocks> {
         PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
+            errs() << formatv("\n[>] Split Basic Blocks Pass\n");
             srand(time(NULL));
 
             auto &CTX = M.getContext();
@@ -48,7 +49,7 @@ namespace {
 
                 if (worklist.empty()) continue;
 
-                errs() << formatv("Targeting {0,3} blocks in function {1,-20}", worklist.size(), F.getName());
+                errs() << formatv("[*] Targeting {0,10} blocks in function {1,-20}", worklist.size(), F.getName());
 
                 for (BasicBlock *BB : worklist) {
                     if ((rand() % 100) >= SPLIT_CHANCE_PERCENT) {

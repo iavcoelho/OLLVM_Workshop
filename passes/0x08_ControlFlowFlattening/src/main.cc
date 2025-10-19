@@ -41,14 +41,13 @@ namespace {
                 auto &CTX = F.getContext();
                 IntegerType *int32Ty = IntegerType::getInt32Ty(CTX);
 
-                // 2. Prepare blocks for flattening.
                 BasicBlock *entryBlock = &F.getEntryBlock();
 
-                if (entryBlock->getTerminator()->getNumSuccessors() != 1) {
+                if (entryBlock->getTerminator()->getNumSuccessors() != 1) {                                 
                     entryBlock->splitBasicBlock(entryBlock->getTerminator(), "entry.split");
                 }
 
-                std::vector<BasicBlock *> originalBlocks;
+                std::vector<BasicBlock *> originalBlocks;                                                                       // Collect original basic blocks
                 for (BasicBlock &BB : F) {
                     if (&BB != entryBlock) {
                         originalBlocks.push_back(&BB);
@@ -59,52 +58,46 @@ namespace {
                     continue;
                 }
 
-                // 3. Create the dispatcher and default blocks.
                 BasicBlock *dispatcherBlock = BasicBlock::Create(CTX, "dispatcher", &F);
                 BasicBlock *defaultBlock = BasicBlock::Create(CTX, "defaultCase", &F);
 
-                new UnreachableInst(CTX, defaultBlock);
+                new UnreachableInst(CTX, defaultBlock);                                                                         // Default case leads to unreachable
 
                 dispatcherBlock->moveAfter(entryBlock);
                 defaultBlock->moveAfter(dispatcherBlock);
 
-                // 4. Create the state variable at the TOP of the entry block.
-                IRBuilder<> allocaBuilder(&entryBlock->front());
+                IRBuilder<> allocaBuilder(&entryBlock->front());                                                                // State variable for the dispatcher
                 AllocaInst *stateVar = allocaBuilder.CreateAlloca(int32Ty, nullptr, "state");
 
-                // 5. Get the first logical block and assign IDs to all blocks.
                 Instruction *entryTerm = entryBlock->getTerminator();
                 BasicBlock *firstBlock = entryTerm->getSuccessor(0);
 
-                std::map<BasicBlock *, int> blockToIdMap;
+                std::map<BasicBlock *, int> blockToIdMap;                                                                       // Map blocks to unique IDs
                 int currentId = 1;
                 for (BasicBlock *BB : originalBlocks) {
                     blockToIdMap[BB] = currentId++;
                 }
 
-                // 6. Initialize state and rewire the entry block's TERMINATOR.
-                IRBuilder<> termBuilder(entryTerm);
+                IRBuilder<> termBuilder(entryTerm);                                                                             // Initialize state variable and branch to dispatcher
                 termBuilder.CreateStore(ConstantInt::get(int32Ty, blockToIdMap[firstBlock]), stateVar);
                 termBuilder.CreateBr(dispatcherBlock);
                 entryTerm->eraseFromParent();
 
-                // 7. Build the switch statement in the dispatcher block.
-                IRBuilder<> dispatcherBuilder(dispatcherBlock);
+                IRBuilder<> dispatcherBuilder(dispatcherBlock);                                                                 // Build the dispatcher switch
                 Value *loadedState = dispatcherBuilder.CreateLoad(int32Ty, stateVar, "loadedState");
                 SwitchInst *dispatchSwitch = dispatcherBuilder.CreateSwitch(loadedState, defaultBlock, originalBlocks.size());
 
-                BasicBlock* lastBlock = dispatcherBlock;
+                BasicBlock* lastBlock = dispatcherBlock;                                                                        // Rewire original blocks
                 for (auto const& [block, id] : blockToIdMap) {
                     dispatchSwitch->addCase(ConstantInt::get(int32Ty, id), block);
                     block->moveAfter(lastBlock);
                 }
 
-                // 8. Rewrite the terminators of all original blocks.
-                for (BasicBlock *BB : originalBlocks) {
+                for (BasicBlock *BB : originalBlocks) {                                                                         // Rewrite terminators   
                     Instruction *terminator = BB->getTerminator();
                     IRBuilder<> builder(terminator);
 
-                    if (isa<ReturnInst>(terminator) || isa<UnreachableInst>(terminator)) {
+                    if (isa<ReturnInst>(terminator) || isa<UnreachableInst>(terminator)) {                                      // Skip return and unreachable instructions
                         continue;
                     }
 
@@ -127,8 +120,7 @@ namespace {
                     }
                 }
 
-                // 9. Move any other stack allocations to the entry block.
-                std::vector<AllocaInst*> AllocasToMove;
+                std::vector<AllocaInst*> AllocasToMove;                                                                         // Move allocas to entry block
                 for (BasicBlock &BB : F) {
                     if (&BB == entryBlock) continue;
                     for (Instruction &I : BB) {

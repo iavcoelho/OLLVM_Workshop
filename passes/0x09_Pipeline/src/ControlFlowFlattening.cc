@@ -18,6 +18,7 @@ namespace {
 
     struct ControlFlowFlattening : public PassInfoMixin<ControlFlowFlattening> {
         PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
+            errs() << formatv("\n[>] Control Flow Flattening Pass\n");
             for (Function &F : M) {
                 if (F.isDeclaration() || F.size() < 3) {
                     continue;
@@ -32,11 +33,11 @@ namespace {
                 }
 
                 if (hasPHINodes) {
-                    errs() << formatv("Skipping function {0,-25} (contains PHI nodes)\n", F.getName());
+                    errs() << formatv("[*] Skipping function {0,-25} (contains PHI nodes)\n", F.getName());
                     continue;
                 }
 
-                errs() << formatv("Flattening function {0,-20}", F.getName());
+                errs() << formatv("[*] Flattening function {0,-40}", F.getName());
 
                 auto &CTX = F.getContext();
                 IntegerType *int32Ty = IntegerType::getInt32Ty(CTX);

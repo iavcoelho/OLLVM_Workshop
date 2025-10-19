@@ -62,6 +62,7 @@ namespace {
 
     struct ArithmeticObf : public PassInfoMixin<ArithmeticObf> {
         PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
+            errs() << formatv("\n[>] Arithmetic Obfuscation Pass\n");
             for (unsigned i = 0; i < ITERNUM; ++i) {
                 for (Function &F : M) {
                     if (F.isDeclaration()) continue;                                                    // Skip function declarations
@@ -84,7 +85,7 @@ namespace {
 
                     if (worklist.empty()) continue;
 
-                    errs() << formatv("[{0,2}/{1}] Targeting {2,10} instructions in function {3,-20}", i + 1, ITERNUM, worklist.size(), F.getName());
+                    errs() << formatv("[*] Targeting {0,10} instrs in function {1,-20}", worklist.size(), F.getName());
 
                     for (BinaryOperator *binOp : worklist) {
                         IRBuilder<NoFolder> builder(binOp);                                             // We use NoFolder to prevent constant folding
@@ -100,7 +101,6 @@ namespace {
                             case Instruction::Or:  newInst = mba_or(lhs, rhs, builder); break;
                             default: continue;
                         }
-                        //errs() << formatv("     [REPLACED]: {0,-35} -> {1}\n", *binOp, *newInst);
                         binOp->replaceAllUsesWith(newInst);
                         binOp->eraseFromParent();
                     }

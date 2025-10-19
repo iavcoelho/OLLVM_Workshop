@@ -65,7 +65,7 @@ endef
 	@ $(call log_success)
 
 test:
-	@ $(call log_info,Testing...)
+	@ $(call log_info,Compiling test...)
 	@ clang -fpass-plugin=bin/$(NAME).so test/test.cc -o test/test
 	@ $(call log_success)
 
