@@ -36,5 +36,11 @@ make <pass-name>
 make test
 ```
 
+## References
+* [LLVM for Grad Students](https://www.cs.cornell.edu/~asampson/blog/llvm.html)
+* [CS 6120: Lesson 6: Writing an LLVM Pass](https://vod.video.cornell.edu/media/CS+6120%3A+Lesson+6%3A+Writing+an+LLVM+Pass/1_4nrtmvc9/179754792)
+* [Writing an LLVM Pass](https://releases.llvm.org/1.9/docs/WritingAnLLVMPass.html)
+* [Open-Obfuscator](https://obfuscator.re/)
+
 ## License
 This project is licensed under the MIT License. See the `LICENSE` file for details.
