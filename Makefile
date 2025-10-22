@@ -14,6 +14,10 @@ define compile_pass
 	podman run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang++ -std=c++20 -fPIC -shared passes/$(1)/src/*.cc -o bin/$(NAME).so \`llvm-config --cxxflags --ldflags --libs core support\`"
 endef
 
+define compile_code
+	@podman run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang -fpass-plugin=bin/$(NAME).so test/test.cc -o test/test"
+endef
+
 0x00_SimplePass: clean
 	@ $(call log_info,Compiling...)
 	@ $(call compile_pass,0x00_SimplePass)
@@ -66,12 +70,12 @@ endef
 
 test:
 	@ $(call log_info,Compiling test...)
-	@ clang -fpass-plugin=bin/$(NAME).so test/test.cc -o test/test
+	@ $(call compile_code)
 	@ $(call log_success)
 
 pod-build:
 	@ $(call log_info, Building Podman image...)
-	@ podman build --build-arg LLVM_VERSION_TAG=llvmorg-$(LLVM_V) --quiet -t llvm-dev . --format docker
+	@ podman build --build-arg LLVM_V=$(LLVM_V) --quiet -t llvm-dev . --format docker
 	@ $(call log_success)
 
 pod-clean:
