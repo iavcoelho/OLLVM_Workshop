@@ -15,7 +15,7 @@ define compile_pass
 endef
 
 define compile_code
-	@podman run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang -fpass-plugin=bin/$(NAME).so test/test.cc -o test/test"
+	podman run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang -fpass-plugin=bin/$(NAME).so test/test.cc -o test/test"
 endef
 
 0x00_SimplePass: clean
