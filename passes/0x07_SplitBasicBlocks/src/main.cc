@@ -25,8 +25,6 @@ namespace {
             auto &CTX = M.getContext();
             IntegerType *int32Ty = IntegerType::getInt32Ty(CTX);
 
-            FunctionCallee randFunc = M.getOrInsertFunction("rand", int32Ty);
-
             auto containsPHI = [](const BasicBlock *BB) {
                 for (const Instruction &I : *BB) {
                     if (isa<PHINode>(&I)) return true;
