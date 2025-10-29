@@ -1,6 +1,6 @@
 # Workshop: OLLVM for the rest of us
 
-This repository contains slides and hands-on materials for the OLLVM workshop. The aborded topics are the following:
+This repository contains hands-on materials for the OLLVM workshop. The aborded topics are the following:
 
 * Simple LLVM Hello World 
 * Functions names listing

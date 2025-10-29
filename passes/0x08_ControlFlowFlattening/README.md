@@ -1,4 +1,4 @@
-# Control Flow Flattening LLVM Pass
+# Control Flow Flattening Pass
 
 This is naive implementation of a Control Flow Flattening obfuscation pass. The core idea of the pass is to eliminate direct branches between basic blocks and instead route all execution through a central "dispatcher" block. This dispatcher uses a state variable to determine which block to execute next, effectively turning the control flow into a large switch statement.
 

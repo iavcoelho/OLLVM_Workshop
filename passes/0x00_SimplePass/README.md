@@ -18,8 +18,7 @@ using namespace llvm;                                                           
 namespace {
     struct HelloWorldPass : public PassInfoMixin<HelloWorldPass> {                  // Use PassInfoMixin to simplify pass creation (new pass manager style <= LLVM 10)
         PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {               // The run method is where the pass logic is implemented
-            // Our pass logic goes here
-
+            errs() << "Hello, World!\n";
             return PreservedAnalyses::all();                                        // Indicate that we did not modify the IR (all analyses are preserved)
         };
     };
