@@ -11,11 +11,15 @@ define log_success
 endef
 
 define compile_pass
-	podman run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang++ -std=c++20 -fPIC -shared passes/$(1)/src/*.cc -o bin/$(NAME).so \`llvm-config --cxxflags --ldflags --libs core support\`"
+	docker run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang++ -std=c++20 -fPIC -shared passes/$(1)/src/*.cc -o bin/$(NAME).so \`llvm-config --cxxflags --ldflags --libs core support\`"
 endef
 
 define compile_code
-	podman run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang -fpass-plugin=bin/$(NAME).so test/test.cc -o test/test"
+	docker run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "clang -fpass-plugin=bin/$(NAME).so test/test.cc -o test/test"
+endef
+
+define run_test
+	docker run --rm -v $(PWD):/usr/local/src llvm-dev sh -c "./test/test"
 endef
 
 0x00_SimplePass: clean
@@ -73,14 +77,19 @@ test:
 	@ $(call compile_code)
 	@ $(call log_success)
 
+run:
+	@ $(call log_info,Running test...)
+	@ $(call run_test)
+	@ $(call log_success)
+
 pod-build:
-	@ $(call log_info, Building Podman image...)
-	@ podman build --build-arg LLVM_V=$(LLVM_V) --quiet -t llvm-dev . --format docker
+	@ $(call log_info, Building docker image...)
+	@ docker build --build-arg LLVM_V=$(LLVM_V) --quiet -t llvm-dev .
 	@ $(call log_success)
 
 pod-clean:
-	@ $(call log_info, Deleting Podman image...)
-	@ podman image rm llvm-dev
+	@ $(call log_info, Deleting docker image...)
+	@ docker image rm llvm-dev
 	@ $(call log_success)
 
 clean:
